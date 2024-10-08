@@ -21,16 +21,35 @@ class Car(pygame.sprite.Sprite):
         self.angle = 0
         self.rotation_vel = 5
         self.direction = 0
+        self.alive = True
     
     def update(self):
         self.drive()
         self.rotate()
         for radar_angle in (-60, -30, 0, 30, 60):
             self.radar(radar_angle)
+        self.collision()
 
     def drive(self):
         if self.drive_state:
             self.rect.center += self.vel_vector * 6
+    
+    def collision(self):
+        length = 40
+        collision_point_right = [int(self.rect.center[0] + math.cos(math.radians(self.angle + 18)) * length),
+                                 int(self.rect.center[1] - math.sin(math.radians(self.angle + 18)) * length)]
+        collision_point_left = [int(self.rect.center[0] + math.cos(math.radians(self.angle - 18)) * length),
+                                int(self.rect.center[1] - math.sin(math.radians(self.angle - 18)) * length)]
+
+        # Die on Collision
+        if SCREEN.get_at(collision_point_right) == pygame.Color(2, 105, 31, 255) \
+                or SCREEN.get_at(collision_point_left) == pygame.Color(2, 105, 31, 255):
+            self.alive = False
+            print("CAR is DEAD!!!")
+
+        # Draw Collision Points
+        pygame.draw.circle(SCREEN, (0, 255, 255, 0), collision_point_right, 4)
+        pygame.draw.circle(SCREEN, (0, 255, 255, 0), collision_point_left, 4)
     
     def rotate(self):
         if self.direction == 1:
