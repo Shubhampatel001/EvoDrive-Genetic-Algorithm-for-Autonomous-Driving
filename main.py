@@ -4,6 +4,13 @@ import math
 import sys
 import neat
 
+COLORS = {
+    'TRACK_COLOR': (2, 105, 31, 255),
+    'COLLISION_COLOR': (0, 255, 255, 0),
+    'RADAR_COLOR': (255, 255, 255, 255),
+    'RADAR_POINT_COLOR': (0, 255, 0, 0)
+}
+
 SCREEN_WIDTH = 1200
 SCREEN_HEIGHT = 600
 SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -44,13 +51,13 @@ class Car(pygame.sprite.Sprite):
                                 int(self.rect.center[1] - math.sin(math.radians(self.angle - 18)) * length)]
 
         # Die on Collision
-        if SCREEN.get_at(collision_point_right) == pygame.Color(2, 105, 31, 255) \
-                or SCREEN.get_at(collision_point_left) == pygame.Color(2, 105, 31, 255):
+        if SCREEN.get_at(collision_point_right) == COLORS['TRACK_COLOR'] \
+                or SCREEN.get_at(collision_point_left) == COLORS['TRACK_COLOR']:
             self.alive = False
 
         # Draw Collision Points
-        pygame.draw.circle(SCREEN, (0, 255, 255, 0), collision_point_right, 4)
-        pygame.draw.circle(SCREEN, (0, 255, 255, 0), collision_point_left, 4)
+        pygame.draw.circle(SCREEN, COLORS['COLLISION_COLOR'], collision_point_right, 4)
+        pygame.draw.circle(SCREEN, COLORS['COLLISION_COLOR'], collision_point_left, 4)
 
     def rotate(self):
         if self.direction == 1:
@@ -75,7 +82,7 @@ class Car(pygame.sprite.Sprite):
 
             # Check if x and y are within bounds
             if 0 <= x < SCREEN_WIDTH and 0 <= y < SCREEN_HEIGHT:
-                if SCREEN.get_at((x, y)) == pygame.Color(2, 105, 31, 255):
+                if SCREEN.get_at((x, y)) == COLORS['TRACK_COLOR']:
                     break  # Stop if we hit grass
             else:
                 break  # Exit if we go out of bounds
@@ -83,8 +90,8 @@ class Car(pygame.sprite.Sprite):
             length += 1
 
         # Draw Radar
-        pygame.draw.line(SCREEN, (255, 255, 255, 255), self.rect.center, (x, y), 1)
-        pygame.draw.circle(SCREEN, (0, 255, 0, 0), (x, y), 3)
+        pygame.draw.line(SCREEN, COLORS['RADAR_COLOR'], self.rect.center, (x, y), 1)
+        pygame.draw.circle(SCREEN, COLORS['RADAR_POINT_COLOR'], (x, y), 3)
 
         dist = int(math.sqrt(math.pow(self.rect.center[0] - x, 2)
                              + math.pow(self.rect.center[1] - y, 2)))
