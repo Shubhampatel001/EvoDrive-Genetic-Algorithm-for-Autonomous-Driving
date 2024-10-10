@@ -4,6 +4,7 @@ import math
 import sys
 import neat
 
+# Color definitions
 COLORS = {
     'TRACK_COLOR': (2, 105, 31, 255),
     'COLLISION_COLOR': (0, 255, 255, 0),
@@ -11,16 +12,21 @@ COLORS = {
     'RADAR_POINT_COLOR': (0, 255, 0, 0)
 }
 
+# Screen dimensions
 SCREEN_WIDTH = 1200
 SCREEN_HEIGHT = 600
 SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
+pygame.font.init()
+
+# Load track image
 TRACK = pygame.image.load(os.path.join("Assets", "track1.png"))
 
 
 class Car(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
+        # Load car image and initialize properties
         self.original_image = pygame.image.load(os.path.join("Assets", "car.png"))
         self.image = self.original_image
         self.rect = self.image.get_rect(center=(490, 530))
@@ -35,38 +41,53 @@ class Car(pygame.sprite.Sprite):
         self.radars.clear()
         self.drive()
         self.rotate()
+        
+        # Create radars at specified angles
         for radar_angle in (-60, -30, 0, 30, 60):
             self.radar(radar_angle)
+
         self.collision()
         self.data()
 
     def drive(self):
+        # Move the car forward
         self.rect.center += self.vel_vector * 6
 
     def collision(self):
         length = 40
-        collision_point_right = [int(self.rect.center[0] + math.cos(math.radians(self.angle + 18)) * length),
-                                 int(self.rect.center[1] - math.sin(math.radians(self.angle + 18)) * length)]
-        collision_point_left = [int(self.rect.center[0] + math.cos(math.radians(self.angle - 18)) * length),
-                                int(self.rect.center[1] - math.sin(math.radians(self.angle - 18)) * length)]
+        # Calculate collision points for right and left sides
+        collision_point_right = [
+            int(self.rect.center[0] + math.cos(math.radians(self.angle + 18)) * length),
+            int(self.rect.center[1] - math.sin(math.radians(self.angle + 18)) * length)
+        ]
+        collision_point_left = [
+            int(self.rect.center[0] + math.cos(math.radians(self.angle - 18)) * length),
+            int(self.rect.center[1] - math.sin(math.radians(self.angle - 18)) * length)
+        ]
 
-        # Die on Collision
-        if SCREEN.get_at(collision_point_right) == COLORS['TRACK_COLOR'] \
-                or SCREEN.get_at(collision_point_left) == COLORS['TRACK_COLOR']:
-            self.alive = False
+        # Check if the collision points are within the screen bounds
+        if (0 <= collision_point_right[0] < SCREEN_WIDTH and 0 <= collision_point_right[1] < SCREEN_HEIGHT) and \
+           (0 <= collision_point_left[0] < SCREEN_WIDTH and 0 <= collision_point_left[1] < SCREEN_HEIGHT):
+        
+            # Mark car as not alive if it collides with the track
+            if SCREEN.get_at(collision_point_right) == COLORS['TRACK_COLOR'] \
+                    or SCREEN.get_at(collision_point_left) == COLORS['TRACK_COLOR']:
+                self.alive = False
 
-        # Draw Collision Points
+        # Draw collision points for visual debugging
         pygame.draw.circle(SCREEN, COLORS['COLLISION_COLOR'], collision_point_right, 4)
         pygame.draw.circle(SCREEN, COLORS['COLLISION_COLOR'], collision_point_left, 4)
 
     def rotate(self):
+        # Rotate car based on direction input
         if self.direction == 1:
             self.angle -= self.rotation_vel
             self.vel_vector.rotate_ip(self.rotation_vel)
-        if self.direction == -1:
+        elif self.direction == -1:
             self.angle += self.rotation_vel
             self.vel_vector.rotate_ip(-self.rotation_vel)
 
+        # Update car image based on the angle
         self.image = pygame.transform.rotozoom(self.original_image, self.angle, 0.1)
         self.rect = self.image.get_rect(center=self.rect.center)
 
@@ -76,11 +97,11 @@ class Car(pygame.sprite.Sprite):
         y = int(self.rect.center[1])
 
         while length < 200:
-            # Calculate x and y based on radar angle and length
+            # Calculate radar endpoint based on angle and length
             x = int(self.rect.center[0] + math.cos(math.radians(self.angle + radar_angle)) * length)
             y = int(self.rect.center[1] - math.sin(math.radians(self.angle + radar_angle)) * length)
 
-            # Check if x and y are within bounds
+            # Stop radar if it hits the track
             if 0 <= x < SCREEN_WIDTH and 0 <= y < SCREEN_HEIGHT:
                 if SCREEN.get_at((x, y)) == COLORS['TRACK_COLOR']:
                     break  # Stop if we hit grass
@@ -89,30 +110,51 @@ class Car(pygame.sprite.Sprite):
 
             length += 1
 
-        # Draw Radar
+        # Draw radar line and point
         pygame.draw.line(SCREEN, COLORS['RADAR_COLOR'], self.rect.center, (x, y), 1)
         pygame.draw.circle(SCREEN, COLORS['RADAR_POINT_COLOR'], (x, y), 3)
 
-        dist = int(math.sqrt(math.pow(self.rect.center[0] - x, 2)
-                             + math.pow(self.rect.center[1] - y, 2)))
-
+        # Calculate distance and store radar data
+        dist = int(math.sqrt(math.pow(self.rect.center[0] - x, 2) +
+                             math.pow(self.rect.center[1] - y, 2)))
         self.radars.append([radar_angle, dist])
 
     def data(self):
-        input = [0, 0, 0, 0, 0]
+        # Prepare input data for the neural network
+        input_data = [0, 0, 0, 0, 0]
         for i, radar in enumerate(self.radars):
-            input[i] = int(radar[1])
-        return input
+            input_data[i] = int(radar[1])
+        return input_data
+
+
+# Global variable to track generations
+generation = 0
+
+
+def draw_stats(generation, alive):
+    # Draw the current generation and number of alive cars on the screen
+    font = pygame.font.Font(None, 50)
+    text = f"Generation: {generation} | Alive: {alive}"
+    text_surface = font.render(text, True, (255, 255, 255))  # White text
+    text_rect = text_surface.get_rect(topleft=(10, 10))
+
+    # Create a transparent background rectangle for better readability
+    background_rect = pygame.Surface(text_rect.size)
+    background_rect.fill((0, 0, 0))  # Fill with black
+    background_rect.set_alpha(128)  # Set transparency
+    SCREEN.blit(background_rect, text_rect.topleft)  # Draw background
+    SCREEN.blit(text_surface, text_rect.topleft)  # Draw text
 
 
 def remove(index):
+    # Remove car and corresponding genome/network from the lists
     cars.pop(index)
     ge.pop(index)
     nets.pop(index)
 
 
 def eval_genomes(genomes, config):
-    global cars, ge, nets
+    global cars, ge, nets, generation
 
     cars = []
     ge = []
@@ -123,7 +165,7 @@ def eval_genomes(genomes, config):
         ge.append(genome)
         net = neat.nn.FeedForwardNetwork.create(genome, config)
         nets.append(net)
-        genome.fitness = 0
+        genome.fitness = 0  # Initialize fitness
 
     run = True
     while run:
@@ -134,24 +176,30 @@ def eval_genomes(genomes, config):
 
         SCREEN.blit(TRACK, (0, 0))
 
+        # Increment generation if no cars are left
         if len(cars) == 0:
+            generation += 1
             break
 
+        # Update fitness for alive cars
         for i, car in enumerate(cars):
             ge[i].fitness += 1
             if not car.sprite.alive:
                 remove(i)
 
+        draw_stats(generation, len(cars))
+
+        # Activate neural network and set car direction
         for i, car in enumerate(cars):
             output = nets[i].activate(car.sprite.data())
             if output[0] > 0.7:
                 car.sprite.direction = 1
-            if output[1] > 0.7:
+            elif output[1] > 0.7:
                 car.sprite.direction = -1
-            if output[0] <= 0.7 and output[1] <= 0.7:
+            else:
                 car.sprite.direction = 0
 
-        # Update
+        # Update car positions and render
         for car in cars:
             car.draw(SCREEN)
             car.update()
@@ -175,6 +223,7 @@ def run(config_path):
     stats = neat.StatisticsReporter()
     pop.add_reporter(stats)
 
+    # Run NEAT for a specified number of generations
     pop.run(eval_genomes, 50)
 
 
