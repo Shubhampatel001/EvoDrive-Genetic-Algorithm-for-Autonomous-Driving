@@ -4,11 +4,11 @@ import math
 import sys
 import neat
 
-SCREEN_WIDTH = 1244
-SCREEN_HEIGHT = 1016
+SCREEN_WIDTH = 1200
+SCREEN_HEIGHT = 600
 SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
-TRACK = pygame.image.load(os.path.join("Assets", "track.png"))
+TRACK = pygame.image.load(os.path.join("Assets", "track1.png"))
 
 
 class Car(pygame.sprite.Sprite):
@@ -16,7 +16,7 @@ class Car(pygame.sprite.Sprite):
         super().__init__()
         self.original_image = pygame.image.load(os.path.join("Assets", "car.png"))
         self.image = self.original_image
-        self.rect = self.image.get_rect(center=(490, 820))
+        self.rect = self.image.get_rect(center=(490, 530))
         self.vel_vector = pygame.math.Vector2(0.8, 0)
         self.angle = 0
         self.rotation_vel = 5
@@ -68,10 +68,19 @@ class Car(pygame.sprite.Sprite):
         x = int(self.rect.center[0])
         y = int(self.rect.center[1])
 
-        while not SCREEN.get_at((x, y)) == pygame.Color(2, 105, 31, 255) and length < 200:
-            length += 1
+        while length < 200:
+            # Calculate x and y based on radar angle and length
             x = int(self.rect.center[0] + math.cos(math.radians(self.angle + radar_angle)) * length)
             y = int(self.rect.center[1] - math.sin(math.radians(self.angle + radar_angle)) * length)
+
+            # Check if x and y are within bounds
+            if 0 <= x < SCREEN_WIDTH and 0 <= y < SCREEN_HEIGHT:
+                if SCREEN.get_at((x, y)) == pygame.Color(2, 105, 31, 255):
+                    break  # Stop if we hit grass
+            else:
+                break  # Exit if we go out of bounds
+
+            length += 1
 
         # Draw Radar
         pygame.draw.line(SCREEN, (255, 255, 255, 255), self.rect.center, (x, y), 1)
