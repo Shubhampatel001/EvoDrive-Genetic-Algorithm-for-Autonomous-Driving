@@ -11,7 +11,6 @@ EvoDrive is a project that combines genetic algorithms with advanced simulation 
 - [Technologies Used](#technologies-used)
 - [How It Works](#how-it-works)
 - [Installation](#installation)
-- [Project Structure](#project-structure)
 - [Challenges Faced](#challenges-faced)
 - [Future Plans](#future-plans)
 
@@ -87,3 +86,55 @@ EvoDrive aims to simulate the following features in a dynamic environment:
    ```bash
    git clone https://github.com/<your-username>/EvoDrive-Genetic-Algorithm-for-Autonomous-Driving.git
    cd EvoDrive-Genetic-Algorithm-for-Autonomous-Driving
+   
+2. Run the JavaScript-based simulation:
+   - Open index.html in your web browser.
+
+## Challenges Faced
+   - Hardware limitations prevented the use of CARLA and Unity for realistic simulation.
+   - Debugging real-time simulations for accurate obstacle detection and pathfinding.
+   - Optimization of genetic algorithms for dynamic environments with limited resources.
+
+## Future Plans
+
+- **Advanced AI Algorithms**: 
+  - Introduce NEAT to complement the genetic algorithm for more adaptive decision-making.
+  - Experiment with hybrid models combining genetic algorithms and deep learning.
+
+- **Realistic Simulation Enhancements**:
+  - Implement a fully 3D simulation environment using WebGL or Three.js for improved visual fidelity.
+  - Incorporate weather effects (rain, fog, etc.) and varying road conditions (wet, icy, gravel).
+
+- **Improved Pathfinding**:
+  - Integrate A* algorithm alongside Dijkstra for more efficient route optimization.
+  - Add support for dynamic re-routing in response to changing traffic and obstacles.
+
+- **Traffic and Multi-Agent Behavior**:
+  - Introduce cooperative AI cars capable of sharing information about traffic and obstacles.
+  - Simulate complex traffic scenarios like intersections, roundabouts, and merging lanes.
+
+- **Integration with Realistic Simulation Platforms**:
+  - visit CARLA and Unity platforms for more realistic environment simulations.
+  - Use Unity’s extensive library to create advanced object detection, traffic scenarios, and physics-based simulations.
+
+- **Game Mode**:
+  - Introduce a "Game Mode" where players can challenge the AI or design obstacles to test its capabilities.
+  - Include leaderboards for AI performance in various scenarios.
+
+These plans aim to push EvoDrive into new realms of capability and user interaction while staying accessible for further development and experimentation.
+
+## License
+   - This project is licensed under the MIT License. See the LICENSE file for more details.
+
+## Contribution
+   - We welcome contributions! Fork the repository, create a new branch for your changes, and submit a pull request. For major changes, please open an issue first to discuss your ideas.
+
+## Acknowledgments
+This project would not have been possible without the guidance and inspiration provided by various individuals and resources:
+
+- **Radu Mariescu-Istodor**: A major credit goes to Radu Mariescu-Istodor for his detailed explanations, resources, and tutorials, which served as a foundation for understanding and implementing many aspects of this project. His work has been instrumental in shaping the technical and conceptual framework of EvoDrive.
+- **Open-Source Community**: For providing tools, libraries, and platforms such as Pygame, JavaScript, and NEAT, which were critical to the development process.
+- **Team Members**: Gratitude to all team members for their hard work, collaboration, and perseverance throughout the project.
+
+We deeply appreciate all contributions and resources that have made this project a reality.
+
