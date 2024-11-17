@@ -1,110 +1,89 @@
-[# **NEAT Wheels - Evolution in Motion** 🚗💨
+# EvoDrive - Genetic Algorithm for Autonomous Driving 🚗💡
 
-### **Phase 2 of 5: Multiple Routes & Shortest Path Calculation**
-
----
-
-Welcome back to the **NEAT Wheels - Evolution in Motion** project! After successfully completing **Phase 1**, where a basic self-driving car model was built, we now move on to **Phase 2** of the project: introducing multiple routes and calculating the shortest path using **Euclidean distance**.
-
-### **🚀 What Was Done in Phase 1?**
-
-In the first phase, I focused on laying the groundwork for car movement and controls, including:
-
-- 📦 **Car Setup**: A car model that can move and rotate smoothly.
-- 🛤️ **Track Loading**: Displaying a pre-defined track for the car to navigate.
-- 🔄 **Car Rotation**: Implementing smooth rotation using `pygame.transform.rotozoom()`.
-- 🏎️ **Velocity Control**: Utilizing `Vector2` for velocity and direction management.
-
-This served as the foundation for more advanced AI-driven behavior that will be introduced in upcoming phases.
+EvoDrive is a project that combines genetic algorithms with advanced simulation techniques to create a pseudo-3D autonomous driving environment. Initially inspired by NEAT (NeuroEvolution of Augmenting Topologies), our project has evolved into a broader implementation of genetic algorithms for self-driving car simulations. This project demonstrates the use of AI to handle tasks such as obstacle avoidance, shortest path navigation, and dynamic world interaction.
 
 ---
 
-## **🗺️ Project Phases Overview**
+## Table of Contents
 
-Here’s a quick overview of the upcoming project phases:
-
-1. **Basic Self-Driving Car using NEAT** (Completed ✅)
-2. **Multiple Routes**: Introducing different paths and calculating the shortest distance using **Euclidean distance** (Next Phase ⏳)
-3. **Stationary Obstacles**: Adding fixed obstacles the car needs to avoid.
-4. **Moving Objects**: Introducing dynamic, moving obstacles that the car must dodge.
-5. **Unity Integration**: Converting the entire project into **Unity** for a more realistic experience.
-
----
-
-## **🌟 Current Focus: Phase 2 - Multiple Routes**
-
-In **Phase 2**, the focus will be on adding multiple routes within the track. The goal is to have the car intelligently choose the shortest path using the **Euclidean distance** algorithm. This phase will lay the foundation for avoiding obstacles and dynamic route selection in future stages.
+- [Project Overview](#project-overview)
+- [Features](#features)
+- [Technologies Used](#technologies-used)
+- [How It Works](#how-it-works)
+- [Installation](#installation)
+- [Project Structure](#project-structure)
+- [Challenges Faced](#challenges-faced)
+- [Future Plans](#future-plans)
 
 ---
 
-## **📂 Project Structure**
+## Project Overview
 
-- **`Assets/`**: Contains track and car images for the simulation.
-- **`main.py`**: Core logic for car movement, rotation, and track management.
-- **`neat_config/`**: Configuration file for NEAT algorithm parameters.
-
----
-
-## **💻 Technologies Used**
-
-- **Python** 🐍
-- **Pygame** 🎮
-- **NEAT Algorithm** 🤖
-  
----
-
-## **📚 Libraries**
-
-- **Pygame**: Pygame is a set of Python modules designed for writing video games. It provides functionality for rendering graphics, handling input, and managing game states. Official documentation: [Pygame Docs](https://www.pygame.org/docs/)
-  
-- **NEAT-Python**: NEAT (NeuroEvolution of Augmenting Topologies) is an evolutionary algorithm that evolves neural networks. This library helps in setting up and evolving neural networks for machine learning tasks. Official documentation: [NEAT-Python Docs](https://neat-python.readthedocs.io/en/latest/)
+EvoDrive aims to simulate the following features in a dynamic environment:
+1. Autonomous driving using genetic algorithms for evolutionary learning.
+2. Handling stationary and moving obstacles in a realistic road setup.
+3. Building a pseudo-3D environment with interactive elements such as traffic lights and road signs.
+4. Dynamic route selection and shortest path computation using algorithms like Dijkstra’s.
+5. Real-time visualization of neural network decisions.
 
 ---
 
-## **⚡ How to Run the Project Locally**
+## Features
+
+### Core Functionalities
+- **Genetic Algorithm for AI Evolution**: Mutation-based learning for car decision-making.
+- **Obstacle Detection and Avoidance**: Sensors simulate real-world proximity detection.
+- **Shortest Path Navigation**: Implementation of Dijkstra's algorithm for route optimization.
+- **Dynamic Environments**: Real-time traffic simulation with AI dummy cars.
+
+### Virtual World
+- **Pseudo-3D World Design**: Roads, buildings, and trees with 3D-like effects.
+- **Traffic Lights and Signs**: Dynamic traffic management with real-time signals.
+- **Interactive Elements**: AI cars interacting with a procedurally generated environment.
+
+### Visualization
+- **Neural Network Representation**: Dynamic visualizations of the AI's decision-making process.
+- **Bird’s-Eye View**: A fixed camera for tracking a single AI car's movements.
+- **Mini-Map Navigation**: Simplified navigation for large virtual environments.
+
+---
+
+## Technologies Used
+
+- **Programming Languages**: JavaScript
+- **Libraries**: N/A
+- **Algorithm**: Genetic Algorithm, Dijkstra's Algorithm
+- **Simulation Tools**: Custom-built pseudo-3D environment 
+- **Version Control**: GitHub
+
+---
+
+## How It Works
+
+1. **Driving Mechanics**: 
+   - Car movement based on acceleration, friction, and rotation using trigonometry.
+   - Keyboard controls for initial manual testing.
+
+2. **Genetic Algorithm**:
+   - Cars evolve their driving behavior through genetic mutations and selection.
+   - Fitness scores are based on distance covered and obstacles avoided.
+
+3. **Sensors and Collision Detection**:
+   - Ray-casting sensors for proximity detection of obstacles and road edges.
+   - Segment intersections used for accurate collision detection.
+
+4. **Dynamic Route Selection**:
+   - Integration of Dijkstra's algorithm for finding optimal paths.
+
+5. **Virtual World Building**:
+   - Procedural generation of roads, buildings, and trees.
+   - Realistic traffic simulation with dummy cars and road markings.
+
+---
+
+## Installation
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/Shubhampatel001/NEAT-Wheels-Evolution-in-Motion.git
-   ```
-   
-2. Navigate into the project directory:
-   ```bash
-   cd NEAT-Wheels-Evolution-in-Motion
-   ```
-
-3. Install dependencies:
-   ```bash
-   pip install pygame neat-python
-   ```
-
-4. Run the project:
-   ```bash
-   python main.py
-   ```
-
----
-
-## **🌟 What's Next?**
-
-The next step is to introduce multiple routes in the track and implement an algorithm to choose the shortest path using **Euclidean distance**. This will allow the car to make more intelligent decisions when navigating complex routes.
-
-Stay tuned for **Phase 2**! 📈
-
----
-##**Link For The Visual Tour**
-
-https://shubhampatel001.github.io/NEAT-Wheels-Evolution-in-Motion/
-
----
-
-### **🙌 Contributing**
-
-Feel free to open issues, submit pull requests, or suggest enhancements as I continue developing the next phases of this project!
-
----
-
-#### **📝 License**
-
-This project is licensed under the MIT License.
-](https://shubhampatel001.github.io/NEAT-Wheels-Evolution-in-Motion/)
+   git clone https://github.com/<your-username>/EvoDrive-Genetic-Algorithm-for-Autonomous-Driving.git
+   cd EvoDrive-Genetic-Algorithm-for-Autonomous-Driving
