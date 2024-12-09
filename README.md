@@ -59,24 +59,52 @@ EvoDrive aims to simulate the following features in a dynamic environment:
 
 ## How It Works
 
-1. **Driving Mechanics**: 
-   - Car movement based on acceleration, friction, and rotation using trigonometry.
-   - Keyboard controls for initial manual testing.
+### **1. Simulation Environment**
+The system creates a virtual road network where vehicles interact. The simulation tests various driving strategies, evaluating them based on predefined metrics like speed, safety, and fuel efficiency.
 
-2. **Genetic Algorithm**:
-   - Cars evolve their driving behavior through genetic mutations and selection.
-   - Fitness scores are based on distance covered and obstacles avoided.
+### **2. Genetic Algorithm for Optimization**
+The genetic algorithm is the core mechanism driving strategy evolution.
 
-3. **Sensors and Collision Detection**:
-   - Ray-casting sensors for proximity detection of obstacles and road edges.
-   - Segment intersections used for accurate collision detection.
+- **Process**:
+  - **Initial Population**: Randomly generated driving strategies are encoded as "chromosomes."
+  - **Fitness Evaluation**: Strategies are tested in the simulation and scored based on metrics such as lap time, collision avoidance, and resource efficiency.
+  - **Selection**: High-performing strategies are selected to propagate to the next generation.
+  - **Crossover and Mutation**:
+    - Crossover combines traits of two parent strategies to create offspring.
+    - Mutation introduces random changes, ensuring diversity and avoiding local optima.
 
-4. **Dynamic Route Selection**:
-   - Integration of Dijkstra's algorithm for finding optimal paths.
+- **Why GA is Used**:
+  GAs are ideal for exploring large, complex search spaces like driving behaviors where the optimal solution isn’t explicitly known.
 
-5. **Virtual World Building**:
-   - Procedural generation of roads, buildings, and trees.
-   - Realistic traffic simulation with dummy cars and road markings.
+### **3. Algorithms and Heuristics**
+
+#### **a. Right-Hand Thumb Rule of Traffic**
+- Vehicles follow this heuristic to maintain lane discipline and align their trajectories with road geometry.
+- This rule ensures realistic driving dynamics, reduces lane violations, and enhances simulation authenticity.
+
+#### **b. Dijkstra’s Algorithm for Pathfinding**
+- The road network is represented as a graph with nodes (intersections) and edges (road segments).
+- **Function**:
+  - Computes the optimal path by minimizing costs like distance or travel time.
+  - Ensures vehicles avoid obstacles and reach their destination efficiently.
+
+#### **c. Interpolation for Smooth Path Generation**
+- Generates intermediate waypoints between known points to create smooth vehicle trajectories.
+- Splines are commonly used to ensure that vehicles follow a continuous and natural curve, avoiding abrupt changes.
+
+#### **d. Envelope Intersection for Collision Detection**
+- Vehicles and obstacles are encapsulated in bounding boxes for real-time collision detection.
+- Overlapping envelopes trigger evasive actions (e.g., braking, steering adjustments).
+- This technique ensures safety in dynamic and crowded environments.
+
+### **4. Simulation Dynamics**
+- **Interaction**:
+  - Pathfinding (via Dijkstra) provides the initial navigation plan.
+  - The genetic algorithm optimizes driving behaviors along the path.
+  - Interpolation and collision detection refine movements and ensure safety.
+
+- **Iterative Learning**:
+  - Over generations, strategies evolve to meet or exceed performance benchmarks, resulting in efficient and robust autonomous driving solutions.
 
 ---
 
